@@ -6,7 +6,7 @@ Docker compose:
 services:
   cibo:
     container_name: cibo
-    image: https://ghcr.io/torrencj/cibo-docker:main
+    image: image: ghcr.io/torrencj/cibo-docker:main
     environment:
       API_KEYS_CONFIG_PATH: '/keys/api_keys.toml'
     ports:
