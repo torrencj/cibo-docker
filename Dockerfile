@@ -1,3 +1,5 @@
+LABEL org.opencontainers.image.description Stock fundamentals analysis in Go
+
 FROM golang:alpine as builder
 WORKDIR /app
 RUN apk add --no-cache git
