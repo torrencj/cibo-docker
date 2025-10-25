@@ -1,5 +1,3 @@
-LABEL org.opencontainers.image.description "Stock fundamentals analysis in Go"
-
 FROM golang:alpine as builder
 WORKDIR /app
 RUN apk add --no-cache git
@@ -8,7 +6,7 @@ RUN go mod download -x
 RUN CGO_ENABLED=0 GOOS=linux go build -o cibo ./cmd 
 
 FROM alpine:latest
-
+LABEL org.opencontainers.image.description "Stock fundamentals analysis in Go"
 WORKDIR /app
 COPY --from=builder /app/cibo .
 CMD ["./cibo"]
