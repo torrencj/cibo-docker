@@ -97,7 +97,7 @@ jobs:
         id: fetch_version_id
         run: |
           new_tag=${{ needs.fetch_previous_calculate_next_tags.outputs.new_tag }}
-          package_name=${{ env.IMAGE_NAME }}
+          package_name=cibo-docker
           repo_name=${{ github.repository }}
           owner=${{ github.repository_owner }}
           api_output=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
