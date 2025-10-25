@@ -93,22 +93,3 @@ jobs:
         # This step uses the identity token to provision an ephemeral certificate
         # against the sigstore community Fulcio instance.
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
-      - name: Fetch package version ID
-        id: fetch_version_id
-        run: |
-          new_tag=${{ needs.fetch_previous_calculate_next_tags.outputs.new_tag }}
-          package_name=cibo-docker
-          repo_name=${{ github.repository }}
-          owner=${{ github.repository_owner }}
-          api_output=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-              "https://api.github.com/orgs/${owner}/packages/container/${package_name}/versions")
-          echo "$api_output"
-          version_id=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-              "https://api.github.com/orgs/${owner}/packages/container/${package_name}/versions" | \
-              jq -r --arg tag "$new_tag" '.[] | select(.metadata.container.tags[] == $tag) | .id')
-          package_url="https://github.com/${repo_name}/pkgs/container/${package_name}/${version_id}?tag=${new_tag}"
-          echo "package_url=$package_url" >> $GITHUB_OUTPUT
-      - name: Write Docker image build summary
-        run: |
-          echo "### Docker Image Build Summary :whale:"  >> $GITHUB_STEP_SUMMARY
-          echo "Docker image built and pushed to [${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ needs.fetch_previous_calculate_next_tags.outputs.new_tag }}](${{ steps.fetch_version_id.outputs.package_url }})" >> $GITHUB_STEP_SUMMARY
