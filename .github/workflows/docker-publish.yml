@@ -100,6 +100,9 @@ jobs:
           package_name=${{ env.IMAGE_NAME }}
           repo_name=${{ github.repository }}
           owner=${{ github.repository_owner }}
+          api_output=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              "https://api.github.com/orgs/${owner}/packages/container/${package_name}/versions"
+          echo "$api_output"
           version_id=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
               "https://api.github.com/orgs/${owner}/packages/container/${package_name}/versions" | \
               jq -r --arg tag "$new_tag" '.[] | select(.metadata.container.tags[] == $tag) | .id')
